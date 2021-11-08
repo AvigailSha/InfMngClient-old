@@ -1,0 +1,39 @@
+<mat-sidenav-container class="container">
+    <mat-sidenav mode="side" opened>
+        <mat-nav-list>       
+            <a mat-list-item  class="nav-list-text" [routerLink]="'informers'"> 
+              <mat-icon mat-list-icon class="nav-list-icon">contact_page</mat-icon> מדווחים </a>
+            <a mat-list-item class="nav-list-text" [routerLink]="'checkes'">
+              <mat-icon mat-list-icon class="nav-list-icon">task</mat-icon> בקרות </a>
+            <a mat-list-item class="nav-list-text" [routerLink]="'tasks'">
+              <mat-icon mat-list-icon class="nav-list-icon">plagiarism</mat-icon> הזמנות </a>
+            <a mat-list-item class="nav-list-text" [routerLink]="'folders'">
+              <mat-icon mat-list-icon class="nav-list-icon">topic</mat-icon> פולדרים </a>
+          </mat-nav-list>
+<!--         <mat-selection-list #navList [multiple]="false">
+            <mat-list-option>
+                <mat-icon mat-list-icon class="nav-list-icon">contact_page</mat-icon>
+                <div class="nav-list-text">מדווחים</div>
+            </mat-list-option>
+            <mat-list-option>
+                <mat-icon mat-list-icon class="nav-list-icon">task</mat-icon>
+                <div class="nav-list-text">בקרות</div>
+            </mat-list-option>
+            <mat-list-option>
+                <mat-icon mat-list-icon class="nav-list-icon">plagiarism</mat-icon>
+                <div class="nav-list-text">איתורים</div>                
+            </mat-list-option>
+            <mat-list-option>
+                <mat-icon mat-list-icon class="nav-list-icon">topic</mat-icon>
+                <div class="nav-list-text">פולדרים</div>
+            </mat-list-option>
+        </mat-selection-list> -->
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-card>
+            <mat-card-content>
+                <router-outlet></router-outlet>
+            </mat-card-content>
+          </mat-card>
+    </mat-sidenav-content>
+</mat-sidenav-container>

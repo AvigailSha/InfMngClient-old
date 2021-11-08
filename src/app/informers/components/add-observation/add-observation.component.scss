@@ -1,0 +1,61 @@
+.titleDialog {
+    color:  rgb(2, 61, 128);
+    font-size: 22px; 
+    font-family: Rubik;
+ }
+
+ .maindialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:  rgb(236, 248, 255);
+    padding-top: 24px;
+ } 
+
+ .props {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color:  rgb(236, 248, 255);
+    padding-top: 24px;
+    margin: 0 0 20px 0;
+ }
+
+ .error {
+     color: red;
+     padding-right: 0 10px 0 0;
+ }
+
+ .general-fab {
+    background-color:  rgb(63,81,181);
+}
+
+ .oneRow {
+    display: inline-block;
+ }
+
+:host ::ng-deep mat-form-field.mat-form-field {
+    font-size: 18px;
+    margin-right: 20px;
+    width: auto;
+ }
+
+:host ::ng-deep mat-dialog-content.mat-dialog-content {
+    padding: 0 !important;
+}
+
+:host ::ng-deep .mat-dialog-title {
+    margin: 0 0 5px !important;
+}
+
+:host ::ng-deep .mat-list-base .mat-list-item, .mat-list-base .mat-list-option{
+    height: inherit !important;
+}
+
+.mat-dialog-actions {
+    justify-content: center;
+    position: absolute;
+    bottom: 8vh;
+    padding: 1vh 24px !important;
+}
+

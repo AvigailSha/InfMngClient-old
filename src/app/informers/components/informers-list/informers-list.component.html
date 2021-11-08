@@ -1,0 +1,125 @@
+<div class="buttons-line">
+    <mat-checkbox [(checked)]="showInactive" (change) = "OnChangeInactive($event.checked)">כולל מדווחים לא פעילים</mat-checkbox>
+    <button mat-raised-button class="mat-raised-button-bold" color="primary" (click)="openDetailsDialog(0)">
+        <mat-icon>account_box</mat-icon>
+        מדווח חדש   
+    </button>
+</div>
+
+<div id="table-container">
+
+    <div class="filters-row" [formGroup]="form">
+        <div class="filter-wrap" *ngFor="let filter of filterSelectObj;" [ngStyle]="applyWidthStyle(filter.colWidth)">
+        <mat-form-field class="filter-item" appearance="fill" *ngIf="filter.options.length > 0 && filter.title.length > 0">
+        <mat-select formControlName="{{filter.columnProp}}" (selectionChange)="filterChange(filter,$event)" (focus)="setupFilter()">
+            <mat-option [value]=""></mat-option>
+            <mat-option [value]="item" *ngFor="let item of filter.options">{{item}}</mat-option>
+        </mat-select> 
+        </mat-form-field> 
+    
+        <mat-form-field class="filter-item" appearance="fill" *ngIf="filter.options.length==0 && 
+            filter.title.length > 0">
+        <input matInput formControlName="{{filter.columnProp}}" (input)="filterInputChange(filter,$event)" (focus)="setupFilter()" autocomplete="off"/>
+        </mat-form-field>
+        <div class="filter-item" *ngIf="filter.title.length==0"></div>
+        </div>
+        <div id="abovetableScroll" style="width: 16.67px;"></div>
+
+    </div>
+
+    <mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z8"
+           matSort>
+
+  <!--   <mat-table [filterType]="filterType" 
+        matTableFilter [exampleEntity]="filterEntity" [dataSource]="dataSource" class="mat-elevation-z8" 
+        matSort  (matSortChange)="onSorting($event);"> -->
+    
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef fxFlex="10%"  mat-sort-header> מספר  
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="10%"> {{element.id}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef fxFlex="15%"  mat-sort-header> שם מדווח 
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="15%"> {{element.name}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="activityStatus">
+            <mat-header-cell *matHeaderCellDef fxFlex="10%" mat-sort-header> סטטוס 
+            
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="10%"> {{element.activityStatusId | valueOfKey : 'infStatus'}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="businessLayer">
+            <mat-header-cell *matHeaderCellDef fxFlex="15%" mat-sort-header> שכבת עסקים 
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="15%"> {{element.businessLayerId | valueOfKey : 'businessLayer'}} </mat-cell>
+        </ng-container> 
+    
+        <ng-container matColumnDef="economyBranch">
+            <mat-header-cell *matHeaderCellDef fxFlex="15%" mat-sort-header> ענף כלכלי
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="15%"> {{element.economyBranchId | valueOfKey : 'economyBranch'}} </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="town">
+            <mat-header-cell *matHeaderCellDef fxFlex="10%" mat-sort-header> ישוב
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="10%"> {{element.townId | valueOfKey : 'town'}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="district">
+            <mat-header-cell *matHeaderCellDef fxFlex="10%" mat-sort-header> מרחב
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="10%"> {{element.districtId | valueOfKey : 'district'}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="findIcon">
+            <mat-header-cell *matHeaderCellDef fxFlex="5%"> </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="5%"> 
+            <button mat-icon-button matTooltip="שליחה לאיתור" [disabled]="!(element.activityStatus | disabledSwap)"
+            (click) = "openFindNewInformerDialog(element.id)" >
+            <mat-icon *ngIf = "element.activityStatus | disabledSwap" svgIcon="find_inf" aria-hidden="false" aria-label="find icon"></mat-icon>
+            </button>
+            </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="swapIcon">
+            <mat-header-cell *matHeaderCellDef fxFlex="5%"> </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="5%"> 
+            <button mat-icon-button matTooltip="המתנה למחליף" [disabled]="element.activityStatus | disabledSwap"
+            (click) = "openSwapDialog(element.id)" >
+            <mat-icon svgIcon="swap_inf" aria-hidden="false" aria-label="swap_inf icon"></mat-icon>
+            </button>
+            </mat-cell>
+        </ng-container>
+    <!-- "swapInformer(element.id)" -->
+        <ng-container matColumnDef="detailsIcon">
+            <mat-header-cell *matHeaderCellDef fxFlex="5%"> </mat-header-cell>
+            <mat-cell *matCellDef="let element" fxFlex="5%"> 
+            <button mat-icon-button matTooltip="פרטי מדווח" (click) = "openDetailsDialog(element.id)" >
+                <mat-icon>more_horiz</mat-icon>
+            </button>
+            </mat-cell>
+        </ng-container>    
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+    
+    <!--[ngClass]="applyRowTextClass(row.color)"   -->
+        <mat-row [ngClass]="{
+            'color-row-blue': row.color === 'blue',
+            'color-row-purple': row.color === 'purple',
+            'color-row-red': row.color === 'red',
+            'color-row-black': row.color === 'black',
+            'color-row-gray': row.color === 'gray',
+            'color-row-lpurple': row.color === 'lpurple' }" 
+            *matRowDef="let row; columns: displayedColumns;" (dblclick)="openDetailsDialog(row.id)">
+        </mat-row>
+    </mat-table>
+    
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]" dir="rtl" showFirstLastButtons class="mat-paginator-sticky"></mat-paginator>
+
+</div>

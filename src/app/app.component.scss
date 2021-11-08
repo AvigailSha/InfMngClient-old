@@ -1,0 +1,27 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-toolbar {
+    max-height: 15%;
+}
+
+.menu-spacer {
+    flex: 1 1 auto;
+}
+
+.logo-content {
+    display: flex;
+    align-items: flex-end;
+    max-height: 64px;
+  }
+
+.logo1 {
+    padding: 2px 2px;
+    max-height: 60px;
+}
+.logo2 {
+    padding: 4px 0;
+    max-height: 56px;
+}

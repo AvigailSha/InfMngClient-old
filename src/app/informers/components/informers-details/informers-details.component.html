@@ -1,0 +1,355 @@
+<p *ngIf="infMode != 'new'" mat-dialog-title class="title">פרטי מדווח: {{FormArray.get([0]).get('name').value}}</p>
+
+<mat-dialog-content [formGroup]="form">
+<mat-horizontal-stepper labelPosition="bottom" formArrayName="formArray" [linear]="false" #stepper >
+    <mat-step id="main" formGroupName="0" [stepControl]="FormArray?.get([0])">
+      <ng-template matStepLabel>ראשי</ng-template>
+      <div class="step-content">
+        <mat-form-field *ngIf="infMode != 'new'">
+          <mat-label>מזהה מדווח</mat-label>
+          <input matInput formControlName="id" readonly>
+        </mat-form-field>
+        <mat-form-field >
+            <mat-label>שם מדווח</mat-label>
+            <input matInput formControlName="name" required [readonly]="infMode == 'wait'">
+          </mat-form-field>
+          <mat-form-field *ngIf="infMode != 'new'">
+            <mat-label>סטטוס פעילות</mat-label>
+            <input matInput required readonly placeholder="" formControlName="activityStatusId" [value]="this.FormArray.get([0]).get('activityStatusId').value | valueOfKey: 'infStatus'">
+            <button matSuffix mat-icon-button  *ngIf="infMode == 'new' || infMode == 'edit'" matTooltip="המתנה למחליף" aria-label="המתנה למחליף" (click)="changeToWaitStatus()">
+              <mat-icon>delete_sweep</mat-icon>
+            </button>
+          </mat-form-field>
+    
+          <mat-form-field *ngIf="infMode == 'new'">
+            <mat-label >שכבת עסקים</mat-label>
+            <mat-select formControlName="businessLayerId" required>
+              <mat-option *ngFor="let element of codesc['businessLayer']" [value]="element.key">
+                {{element.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="infMode != 'new'">
+            <mat-label >שכבת עסקים</mat-label>
+            <input matInput formControlName="businessLayerId" required readonly [value]="this.FormArray.get([0]).get('businessLayerId').value | valueOfKey: 'businessLayer'">
+          </mat-form-field>         
+
+          <mat-form-field *ngIf="infMode == 'new' || infMode == 'edit'">
+            <mat-label>ענף כלכלי</mat-label>
+            <mat-select formControlName="economyBranchId" required>
+              <mat-option *ngFor="let element of codesc['economyBranch']" [value]="element.key">
+                {{element.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="!(infMode == 'new' || infMode == 'edit')">
+            <mat-label>ענף כלכלי</mat-label>
+            <input matInput formControlName="economyBranchId" readonly [value]="this.FormArray.get([0]).get('economyBranchId').value | valueOfKey: 'economyBranch'">
+          </mat-form-field>
+          <mat-form-field *ngIf="infMode == 'new' || infMode == 'edit'">
+            <mat-label>מרחב</mat-label>
+            <mat-select formControlName="districtId" required>
+                <mat-option *ngFor="let element of codesc['district']" [value]="element.key">
+                  {{element.value}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="!(infMode == 'new' || infMode == 'edit')">
+            <mat-label>מרחב</mat-label>
+            <input matInput formControlName="districtId" readonly [value]="this.FormArray.get([0]).get('districtId').value | valueOfKey: 'district'">
+          </mat-form-field>
+          <div *ngIf="IsHotelEconomyBranch()">
+            <p>מס' כוכבים: {{rating}}</p>
+            <mat-star-rating [rating]="rating" [starCount]="starCount" [color]="starColor" 
+              (ratingUpdated)="onRatingChanged($event)" [isDisabled]="infStatusFlag">
+            </mat-star-rating>
+          </div>
+      </div>
+    </mat-step>
+     <mat-step id="collect" formGroupName="1" [stepControl]="FormArray?.get([1])">
+        <ng-template matStepLabel>איסוף</ng-template>
+        <div class="step-content">
+          <mat-form-field *ngIf="infMode == 'new' || infMode == 'edit'">
+            <mat-label>שיטת איסוף</mat-label>
+            <mat-select formControlName="colMethodId" required >
+                <mat-option *ngFor="let element of codesc['colMethod']" [value]="element.key">
+                  {{element.value}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="!(infMode == 'new' || infMode == 'edit')">
+            <mat-label>שיטת איסוף</mat-label>
+            <input matInput formControlName="colMethodId" readonly [value]="this.FormArray.get([1]).get('colMethodId').value | valueOfKey: 'colMethod'">
+          </mat-form-field>
+      
+          <mat-form-field *ngIf="infMode == 'new' || infMode == 'edit'">
+            <mat-label>שבוע איסוף</mat-label>
+            <mat-select formControlName="collectWeekId" required>
+                <mat-option *ngFor="let element of codesc['collectWeek']" [value]="element.key">
+                  {{element.value}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="!(infMode == 'new' || infMode == 'edit')">
+            <mat-label>שבוע איסוף</mat-label>
+            <input matInput formControlName="collectWeekId" readonly [value]="this.FormArray.get([1]).get('collectWeekId').value | valueOfKey: 'collectWeek'">
+          </mat-form-field>
+          <mat-form-field *ngIf="infMode == 'new' || infMode == 'edit'">
+            <mat-label>יום איסוף</mat-label>
+            <mat-select formControlName="collectDay">
+              <mat-option *ngFor="let item of daysMap | keyvalue" [value]="item.key">
+                {{item.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+     <!-- להעביר את המאפ הנ"ל לאוסף הקודסק ולשלוף אותו באמצעות הסרויס     
+        <mat-form-field *ngIf="!(infMode == 'new' || infMode == 'edit')">
+            <mat-label>יום איסוף</mat-label>
+            <input matInput formControlName="collectDay" readonly [value]="this.FormArray.get([1]).get('collectDay').value | keyvalue">
+          </mat-form-field> -->
+    
+          <mat-form-field>
+            <mat-label>זמן איסוף מועדף</mat-label>
+            <input matInput formControlName="collectTime" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder="" >
+          </mat-form-field>
+    
+        <!--TD -  להפוך את זה לקומפננטה-->
+          <div class="monthes">
+            <mat-label>חודשי איסוף:</mat-label>
+            <!-- : 0 -->
+            <div *ngFor="let item of monthesMap | keyvalue" >
+              <mat-checkbox required [readonly]="!(infMode == 'new' || infMode == 'edit')" color='primary' [checked]="item.value" [disabled]="curInf?.activityStatusId === 5">{{item.key}}</mat-checkbox>
+          </div> 
+          </div>
+        </div>
+    </mat-step>
+    <mat-step id="address" formGroupName="2" [stepControl]="FormArray?.get([2])">
+        <ng-template matStepLabel>מיקום</ng-template>
+        <div class="step-content">
+          <mat-form-field *ngIf="infMode == 'new' || infMode == 'edit'">
+            <mat-label>עיר/יישוב</mat-label>
+            <mat-select formControlName="townId" required> 
+                <mat-option *ngFor="let element of codesc['town']" [value]="element.key">
+                  {{element.value}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="!(infMode == 'new' || infMode == 'edit')">
+            <mat-label>עיר/יישוב</mat-label>
+            <input matInput formControlName="townId" readonly [value]="this.FormArray.get([2]).get('townId').value | valueOfKey: 'town'">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>רחוב</mat-label>
+            <input type="text" matInput formControlName="street" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder="">
+          </mat-form-field>
+    
+          <mat-form-field>
+            <mat-label>מס' בית</mat-label>
+            <input type="text" matInput formControlName="home" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder="">
+          </mat-form-field>
+      
+          <mat-form-field>
+            <mat-label>פקס</mat-label>
+            <input type="tel" matInput formControlName="fax" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder="">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>דואר אלקטרוני</mat-label>
+            <input type="email" matInput formControlName="email" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder="">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>אתר</mat-label>
+            <input type="url" matInput formControlName="website" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder="">
+          </mat-form-field>
+        </div>
+    </mat-step>
+    <mat-step id="more" formGroupName="3" [stepControl]="FormArray?.get([3])">
+      <ng-template matStepLabel>פרטים נוספים</ng-template>
+      <div class="step-content">
+        <mat-form-field>
+          <mat-label>הערה לאיסוף</mat-label>
+          <textarea matInput formControlName="collectComment" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder=""></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>הערה למדווח</mat-label>
+          <textarea matInput formControlName="informerComment" [readonly]="!(infMode == 'new' || infMode == 'edit')" placeholder=""></textarea>
+        </mat-form-field>
+        <mat-form-field *ngIf="infMode != 'new'">
+          <mat-label>סוקר</mat-label>
+          <input matInput required readonly formControlName="enumeratorName" placeholder="">
+        </mat-form-field>
+       <!--  TD -עבור מדווח חדש, לתת אפשרות להגדיר שם סוקר האם זו הקלדה חופשית??
+        <mat-form-field *ngIf="infMode == 'new'">
+          <mat-label>סוקר</mat-label>
+          <mat-select formControlName="enumeratorId" required>
+              <mat-option *ngFor="let element of codesc['enumerator']" [value]="element.key">
+                {{element.value}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field> -->
+        <mat-form-field *ngIf="infMode != 'new'">
+          <mat-label>מקור איתור</mat-label>
+          <input matInput readonly formControlName="iturSourceName" placeholder="" readonly="true">
+        </mat-form-field>
+         <!--  TD -עבור מדווח חדש, לתת אפשרות להגדיר מקור איתור, להוסיף את זה לקודס??
+        <mat-form-field *ngIf="infMode == 'new'">
+          <mat-label>מקור איתור</mat-label>
+          <mat-select formControlName="iturSourceId" required>
+              <mat-option *ngFor="let element of codesc['iturSource']" [value]="element.key">
+                {{element.value}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field> -->
+        <mat-checkbox [readonly]="!(infMode == 'new' || infMode == 'edit')" color='primary' *ngIf="curInf?.townId==2600" formControlName="EilatVAT">כולל מע"מ</mat-checkbox>
+        
+      </div>
+  </mat-step>
+    <mat-step id="contact" formGroupName="4" [stepControl]="FormArray?.get([4])">
+        <ng-template matStepLabel>אנשי קשר וטלפונים</ng-template>                            
+        <div formArrayName="Contacts">
+          <div style="padding: 10px 0 0 0">
+            <button *ngIf="curInf?.activityStatusId !== 5 && (infMode == 'new' || infMode == 'edit')" mat-mini-fab matTooltip="הוספת איש קשר חדש" class="general-fab" (click)="addContact()"> 
+              <mat-icon>person_add</mat-icon>
+            </button>
+            
+          </div>
+            <div *ngFor="let con of contacts().controls; let i = index" class="contact">
+              <div [formGroupName]="i"> 
+                <div>
+                  <div style="position: relative; bottom: -85px; right: 5px;">
+                    <button *ngIf="curInf?.activityStatusId !== 5 && (infMode == 'new' || infMode == 'edit')" mat-mini-fab color="warn" class="small-fab" matTooltip="מחיקת איש קשר" (click)="removeContact(i)" style="margin: 0 5px 0 10px;">  
+                    <mat-icon>person_remove</mat-icon>
+                  </button>
+                </div>
+              <div style="margin-right: 55px;">
+                <mat-icon style="padding-left: 15px;">person</mat-icon>
+                <mat-form-field>
+                    <mat-label>שם איש קשר</mat-label>
+                    <input matInput [readonly]="infStatusFlag" placeholder="" formControlName="name">
+                  </mat-form-field>
+          
+                  <mat-form-field>
+                    <mat-label>זמן ביקור מועדף</mat-label>
+                    <mat-select formControlName="visitTimeId">
+                      <mat-option *ngFor="let element of codesc['visitTime']" [value]="element.key">
+                        {{element.value}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button *ngIf="curInf?.activityStatusId !== 5 && !infStatusFlag" mat-mini-fab matTooltip="הוספת טלפון" class="small-fab" (click)="addPhone(i)">
+                    <mat-icon>add_ic_call</mat-icon>
+                  </button>
+                </div>
+                </div>
+                  <div formArrayName="phones">
+                    <div *ngFor="let p of phones(i).controls; let j = index" class="phone"> 
+                      <div [formGroupName]="j">
+                       
+                        <mat-icon style="padding-left: 15px;">phone</mat-icon>
+                        <mat-form-field>
+                            <mat-label>סוג טלפון</mat-label>
+                            <mat-select formControlName="phoneTypeId">
+                            <mat-option *ngFor="let element of codesc['phoneType']" [value]="element.key">
+                                {{element.value}}
+                            </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>טלפון</mat-label>
+                          <input matInput placeholder="" formControlName="phone" [readonly]="infStatusFlag">
+                      </mat-form-field>
+                      <button *ngIf="curInf?.activityStatusId !== 5" mat-mini-fab matTooltip="מחיקת טלפון" class="small-fab" (click)="removePhone(i,j)">
+                        <mat-icon>delete_forever</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  </div>
+              </div>
+              <mat-divider></mat-divider>
+          </div>
+        </div>
+    </mat-step>
+    <mat-step id="obs" formGroupName="5" [stepControl]="FormArray?.get([5])">
+      <ng-template matStepLabel>תצפיות (סה"כ {{this.observation()?.length}})</ng-template>
+      <div formArrayName="Observation">
+        <!--  -->
+        <button *ngIf="isAddOb"  mat-mini-fab matTooltip="הוספת תצפיות" class="general-fab" (click)="addObservation()">
+          <mat-icon>add</mat-icon>
+        </button>
+          <!--*ngIf="obDataSource.data.length>0" matSortActive="name" matSortDirection="asc" -->
+        <div *ngIf="isShowHotelServices" fxLayout="row wrap" fxLayoutAlign="space-around center" style="background-color: #C5CAE9;">
+          <div *ngFor="let item of servicesMap | keyvalue: 0" >
+            <mat-checkbox color='primary' [checked]="item.value" (change)="addHotelObs($event, item.Key)">
+              {{item.key}}
+            </mat-checkbox>
+          </div>
+        </div>
+        <div>
+          <mat-table matSort [dataSource]="obDataSource" class="obs" matSortActive="name" matSortDirection="asc" [hidden]="this.observation()?.length==0">
+                                    
+        <ng-container matColumnDef="numbering">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element = index;"> {{element+1}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> מזהה </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.itemId}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="obId">
+            <mat-header-cell *matHeaderCellDef> מזהה לשימוש פנימי </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.obId}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> שם תצפית </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                <div>{{element.name}}</div>
+                <div *ngIf="getObControlById(element.obId)?.get('isMultiShows').value===3">
+                  <span *ngFor="let pm of getObControlById(element.obId)?.get('propsMods').value">
+                    {{pm.propName}}: {{pm.modName}}&nbsp;<br>
+                  </span>
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+     
+          <ng-container matColumnDef="weight">
+            <mat-header-cell *matHeaderCellDef> משקל </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+          </ng-container>
+        
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef> סטטוס </mat-header-cell>
+            <mat-cell *matCellDef="let element; let i = index"> {{element.status | valueOfKey: 'nodeStatus'}} <!-- changeObStatus(element.id) -->
+              <button matSuffix mat-icon-button matTooltip="המתנה למחליף" aria-label="המתנה למחליף" (click)="changeObStatus(element.obId)" [disabled]="element.status == 2">
+                <mat-icon>delete_sweep</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+    
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step id="folders" formGroupName="6" [stepControl]="fstep.foldersPart">
+      <ng-template matStepLabel>פולדרים</ng-template>
+      <inf-folders #fstep [infId]= "curInfID"></inf-folders>
+    </mat-step>
+    <mat-step id="colHist" formGroupName="" [stepControl]="">
+      <ng-template matStepLabel>הסטוריית איסוף</ng-template>
+    </mat-step>
+</mat-horizontal-stepper>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div style=" width: 100%; display: flex; justify-content: center; align-items: center;">
+      <button (click)="close()" mat-stroked-button style="margin-left: 15px;">
+        <mat-icon class="mat-icon-rtl-mirror">keyboard_backspace</mat-icon>
+      </button>                        <!-- [disabled]="!form.valid" -->
+      <button class="mat-flat-button mat-primary" style="margin-left: 15px;" (click)="save()" >שמירה</button>
+      <button class="mat-flat-button mat-primary" (click)="reset()">ביטול שינויים</button>
+    </div>
+</mat-dialog-actions>
+
+  
+  

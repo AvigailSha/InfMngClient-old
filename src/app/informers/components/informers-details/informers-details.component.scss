@@ -1,0 +1,173 @@
+.screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.mainRouting {
+    width: 100%;
+    flex: 10%;
+    background-color: rgb(63,81,181);
+
+}
+
+.content {
+    width: 100%;
+    flex: 90%;
+    background-color: rgb(238, 236, 236);
+    display: flex;
+
+}
+
+.colRouting {
+    flex: 5%;
+    background-color: rgb(226, 222, 222);
+}
+
+.colDetails {
+    flex: 95%;
+    background-color: inherit;
+}
+
+.mainDetails {
+    margin: 10px;
+}
+
+.title {
+    color: rgb(63,81,181);
+    font-size: 22px; 
+    font-family: Rubik;
+    padding: 25px 25px 0 25px;
+}
+
+.custom-dialog {
+    mat-dialog-container {
+        background-color: rgb(236, 248, 255);;
+    }
+}
+
+.monthes {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.phone {
+    padding: 10px 100px 0 !important;
+    background-color: #f5f5f5;
+}
+
+.step-content {
+    padding-right: 5px;
+}
+
+.contacts:nth-child(odd) {
+    background: rgb(246, 246, 250);
+}
+
+:host ::ng-deep mat-form-field.mat-form-field {
+   font-size: 18px;
+   margin-left: 25px;
+}
+
+mat-checkbox.mat-checkbox {
+    margin-right: 10px;
+    
+}
+:host ::ng-deep mat-checkbox.mat-checkbox-background {
+    background-color: aquamarine;
+
+}
+
+
+
+mat-step-text-label.mat-step-text-label {
+    font-size: 20px;
+    font-weight: 500;
+}
+/* :host {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  } */
+
+:host ::ng-deep .mat-horizontal-content-container {
+    padding: 24px 24px 24px 24px !important;
+}
+
+.mat-dialog-actions {
+    justify-content: center;
+    position: absolute;
+    bottom: 8vh;
+    padding: 1vh 24px !important;
+}
+
+.general-fab {
+    background-color:  rgb(63,81,181);
+}
+    
+    .small-fab {
+   // margin-right: 8px;
+    width: 30px;
+    height: 30px;
+    line-height: 22px;
+    font-size: 22px;
+    background-color:  rgb(47, 163, 82);
+    opacity: 3;
+
+    &::ng-deep .mat-button-wrapper{
+       // line-height: 18px;
+        padding: 0;
+
+         .mat-icon {
+             font-size: 22px;
+            // padding-right: 4px;
+           //  padding-top: 4px;
+         }
+        }
+   }
+
+
+   ::ng-deep .mat-button{
+     width: 32px !important;
+     height: 32px !important; 
+   /* font-size:16px !important;
+   */
+ }
+
+ :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-icon-button .mat-icon {
+     font-size: 1.5em;
+ }
+
+ @mixin mat-table-columns($columns)
+{
+    .mat-column-
+    {
+        @each $colName, $props in $columns {
+
+            $width: map-get($props, 'width');
+
+            &#{$colName} 
+            {
+                flex: $width;
+                min-width: $width;
+                padding: map-get($props, 'padding' !important);
+                @if map-has-key($props, 'color') 
+                {
+                    color: map-get($props, 'color');
+                }
+            }  
+        }
+    }
+}
+
+ @include mat-table-columns((
+    numbering:(width: 5%, padding: 0 15px 0 15px ),
+    id: (width: 20%, padding: 0 15px 0 15px),
+    name: (width: 50%, padding: 0 15px 0 15px),
+    weight: (width: 10%, padding: 0 15px 0 15px),
+    status: (width: 20%, padding: 0 15px 0 15px)
+
+));

@@ -1,0 +1,104 @@
+<button class="close" mat-button (click)="closeStepper()">X</button>
+
+<p mat-dialog-title class="title">תהליך הסרת מדווח מאיסוף</p>
+
+<mat-stepper [linear]="true" [selectedIndex]="currStep" #stepper>
+    <mat-step [stepControl]="firstFormGroup" [editable] = "!disable1st">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>בחירת טיפול בבקרה</ng-template>
+        <p> מדווח {{ curInfId  }} עלה לבקרה , אנא בחר את הפעולה הרצויה</p>
+        <mat-radio-group formControlName="radioCtrl" class="my-radio-group"  #radioGroup="matRadioGroup" required>
+          <mat-radio-button value="1">המשך איסוף בחודש הבא</mat-radio-button>
+          <mat-radio-button value="2">המתנה למחליף</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperNext *ngIf = "radioGroup.value == 2">הבא</button>
+          <button mat-button (click) = "continueCol()" *ngIf = "radioGroup.value == 1">סיום</button>  
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>שליחה לאיתור</ng-template>
+        <div>
+        <mat-radio-group formControlName="radioCtrl" class="my-radio-group"  #radioGroup1="matRadioGroup" >
+          <mat-radio-button value="1">המתנה למחליף ללא איתור</mat-radio-button>
+          <mat-radio-button value="2">איתור</mat-radio-button>
+          <mat-radio-button value="3">החלפה ללא איתור</mat-radio-button>
+        </mat-radio-group>
+        </div>
+        <div>
+          <button mat-button matStepperPrevious>חזור</button>
+          <button mat-button matStepperNext (click)="checkFolders()"  *ngIf = "radioGroup1.value != 1">הבא</button>
+          <button mat-button (click) = "swapNoFind()"  *ngIf = "radioGroup1.value == 1">סיום</button>  
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="foldersFormGroup">
+      <form [formGroup]="foldersFormGroup">
+      <ng-template matStepLabel>שיוך פולדרים למדווח</ng-template>
+      <div class = "foldersContainer"></div>
+        <inf-folders [infId]= "curInfId" formControlName="foldersCtrl"></inf-folders>
+        <div class = "stepperButtons">
+          <button mat-button matStepperPrevious>חזור</button>
+          <button mat-button matStepperNext>הבא</button>
+        </div>
+    </form>
+    </mat-step>
+    <mat-step [stepControl]="findMethodFormGroup">
+      <form [formGroup]="findMethodFormGroup">
+        <ng-template matStepLabel>אופן איתור וקריטריונים</ng-template>
+        <div>
+        <div style="display: inline;float: right" >
+        
+        <fieldset>
+          <legend>
+              <label>אופן איתור</label>
+          </legend>
+          <div >
+              <mat-radio-group class="my-radio-group"  formControlName="radioCtrl"
+              #radioGroupArea="matRadioGroup" required (ngModel)="area" aria-label="אופן איתור">
+                  <mat-radio-button value="1">איתור בשטח</mat-radio-button>
+                  <mat-radio-button value="2">איתור טלפוני</mat-radio-button>
+              </mat-radio-group>
+          </div>
+      </fieldset>
+ 
+    <div style="display: inline; float: left;" >
+      <app-find-new-informer mode="1" currentInf="currentInf"></app-find-new-informer>
+    </div>
+        </div>
+    </div>
+       <!--  <mat-radio-group  formControlName="radioCtrl" (ngModel)="area" class="my-radio-group">
+          <mat-radio-button value="1">איתור בשטח</mat-radio-button>
+          <mat-radio-button value="2">איתור טלפוני</mat-radio-button>
+        </mat-radio-group>       -->
+        <div>
+          <button mat-button matStepperPrevious>חזור</button>
+          <button mat-button matStepperNext (click)="checkSkip()" >הבא</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="forthFormGroup" [editable]= "radioGroupArea.value != 1">
+      <form [formGroup]="forthFormGroup">
+        <ng-template matStepLabel>בחירת מועמדים</ng-template>
+        <mat-radio-group formControlName="radioCtrl" class="my-radio-group">
+          <mat-radio-button value="1">מע"מ</mat-radio-button>
+          <mat-radio-button value="2">הקלדה ידנית</mat-radio-button>
+          <!-- <mat-radio-button value="3">שליפה ממאגר מועמדים</mat-radio-button> -->
+        </mat-radio-group>    
+        <div>
+          <button mat-button matStepperPrevious>חזור</button>
+          <button mat-button matStepperNext>הבא</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>סיום תהליך איתור</ng-template>
+      
+      <div>
+        <button mat-button matStepperPrevious>חזור</button>
+        <button mat-button >סיום</button>
+      </div>
+    </mat-step>
+</mat-stepper>

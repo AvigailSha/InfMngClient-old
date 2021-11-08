@@ -1,0 +1,74 @@
+
+  <p *ngIf = "folder" cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane" 
+  cdkDragHandle mat-dialog-title class="title">פריטים לפולדר - {{folder.value}} </p>
+<form *ngIf="!folder">
+<mat-form-field >
+  <input matInput [(ngModel)]="newFolder" [formControl]="newFolderFormControl" 
+    minlength="3" maxlength="150" autofocus #edit>
+  <mat-error *ngIf="newFolderFormControl.hasError('minlength')">
+    min 3 caracters
+  </mat-error>
+  <mat-hint align="end">{{edit.value.length}} / 150 </mat-hint>
+  
+
+</mat-form-field>
+<button mat-icon-button (click)="saveNewFolder()" ><mat-icon>check_circle</mat-icon></button>
+</form>
+<mat-dialog-content >
+  <mat-list class="content">
+    <mat-list>
+      <form >
+        <ng-container >
+        
+        <mat-form-field class="example-full-width">
+          
+          <mat-label>שם פריט</mat-label>
+          <input type="text"
+          #input
+                 placeholder="בחר פריט"
+                 aria-label="Number"
+                 matInput
+                 [formControl]="itemControl"
+                 [matAutocomplete]="auto"
+                 >
+                 <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelect()">
+                  <mat-icon>close</mat-icon>
+                </button>
+               
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"  [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async " [value]="option">
+              {{option.value}}
+            </mat-option>
+          </mat-autocomplete>
+       
+          <mat-error *ngIf="itemControl.hasError('incorrect')">
+            יש לבחור פריט מהרשימה
+        </mat-error>
+      </mat-form-field>
+      <button mat-icon-button (click)="addItem(itemControl);clearSelect();" [hidden]="false" 
+      [disabled]="itemControl.hasError('incorrect') || itemControl.value.length==0">
+        <mat-icon>add_circle</mat-icon></button>
+      </ng-container>
+      </form>
+      
+    </mat-list>
+      <mat-list-item *ngFor="let item of folderItems" >
+        
+        <h3 matLine> {{item.value}} </h3>
+  
+    <button mat-icon-button (click) = "removeItem(item);" >
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+      </mat-list-item>
+  </mat-list>   
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div style=" width: 100%; display: flex; justify-content: right; align-items: center;">
+    <button (click)="close()" mat-stroked-button style="margin-left: 7px;">
+      <mat-icon class="mat-icon-rtl-mirror">keyboard_backspace</mat-icon>
+    </button>
+    <button mat-flat-button color="primary" [disabled]="DeletedItems.length==0 
+    && NewItems.length==0" (click)="save()">שמירה</button>
+  </div>
+</mat-dialog-actions>

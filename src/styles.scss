@@ -1,0 +1,27 @@
+@use 'styles/material-common' as mat-common;
+
+@include mat-common.main();
+
+
+html, body { 
+  height: 100%; 
+  width: 100%;
+  overflow-y: hidden;
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  background-color: var(--b-background);
+}
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+/*@font-face {
+  font-family: "Rubik";
+  src: local("Rubik"), url(./assets/fonts/Rubik/Rubik-Regular.ttf) format("truetype");
+}*/

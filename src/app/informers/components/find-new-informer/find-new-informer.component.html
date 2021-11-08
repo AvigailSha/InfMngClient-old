@@ -1,0 +1,146 @@
+<div [formGroup]="findInfForm">
+    <div>  
+        <mat-grid-list cols="2" [cols]="breakpoint" rowHeight="85px" (window:resize)="onResize($event)">
+          <mat-grid-tile>
+            <div class="text-inside">
+             <mat-form-field class="example-full-width">
+            
+                <mat-label>שם יישוב</mat-label>
+                <input type="text"
+                #input
+                       placeholder="בחר יישוב"
+                       aria-label="Number"
+                       matInput
+                       [formControl]="GeogrControl"
+                       [matAutocomplete]="autoGeog"
+                       >
+                       <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelect(GeogrControl)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                     
+                <mat-autocomplete autoActiveFirstOption #autoGeog="matAutocomplete"
+                [displayWith]="displayFn">
+                  <mat-option *ngFor="let option of filteredGeogr | async " [value]="option">
+                    {{option.value}}
+                  </mat-option>
+                </mat-autocomplete>
+             
+                <mat-error *ngIf="GeogrControl.hasError('incorrect')">
+                  יש לבחור פריט מהרשימה
+              </mat-error>
+            </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          
+          <mat-grid-tile>
+            <div class="text-inside">
+              <mat-form-field class="example-full-width">
+             
+                <mat-label>ענף כלכלי</mat-label>
+                <input type="text"
+                #input
+                       placeholder="בחר ענף כלכלי"
+                       aria-label="Number"
+                       matInput
+                       [formControl]="EconomyBranchControl"
+                       [matAutocomplete]="autoEco"
+                       
+                       >
+                       <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelect(EconomyBranchControl)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                     
+                <mat-autocomplete autoActiveFirstOption #autoEco="matAutocomplete"
+                [displayWith]="displayFn">
+                  <mat-option *ngFor="let option of filteredEcoBranch | async " [value]="option">
+                    {{option.value}}
+                  </mat-option>
+                </mat-autocomplete>
+             
+                <mat-error *ngIf="EconomyBranchControl.hasError('incorrect')">
+                  יש לבחור פריט מהרשימה
+              </mat-error>
+              </mat-form-field> 
+            </div>
+          </mat-grid-tile>
+      
+          <mat-grid-tile>
+            <div class="text-inside">
+              <mat-form-field class="example-full-width">
+             
+                <mat-label>שכבת עסקים</mat-label>
+                <input type="text"
+                #input
+                       placeholder="בחר שכבת עסקים"
+                       aria-label="Number"
+                       matInput
+                       [formControl]="BusinessLayerControl"
+                       [matAutocomplete]="autoBusiness"
+                       [readonly]="isSwapMode()"
+                       >
+                       <button mat-button matSuffix mat-icon-button aria-label="Clear" 
+                       (click)="clearSelect(BusinessLayerControl)" *ngIf = "!isSwapMode()">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                     
+                <mat-autocomplete autoActiveFirstOption #autoBusiness="matAutocomplete"
+                [displayWith]="displayFn">
+                  <mat-option *ngFor="let option of filteredBusinessLayer | async " [value]="option">
+                    {{option.value}}
+                  </mat-option>
+                </mat-autocomplete>
+             
+                <mat-error *ngIf="EconomyBranchControl.hasError('incorrect')">
+                  יש לבחור פריט מהרשימה
+              </mat-error>
+              </mat-form-field> 
+            </div>
+          </mat-grid-tile>
+        
+          <mat-grid-tile>
+            <div class="text-inside">
+
+            <mat-form-field class="example-full-width">
+            
+              <mat-label>שיטת איסוף</mat-label>
+              <input type="text"
+              #input
+                     placeholder="שיטת איסוף"
+                     aria-label="Number"
+                     matInput
+                     [formControl]="ColCenterControl"
+                     [matAutocomplete]="autoColCenter"
+                     [readonly]="isSwapMode()"
+                     >
+                     <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf = "!isSwapMode()" (click)="clearSelect(ColCenterControl)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                   
+              <mat-autocomplete autoActiveFirstOption #autoColCenter="matAutocomplete"  [displayWith]="displayFn">
+                <mat-option *ngFor="let option of filteredColCenter | async " [value]="option">
+                  {{option.value}}
+                </mat-option>
+              </mat-autocomplete>
+           
+              <mat-error *ngIf="ColCenterControl.hasError('incorrect')">
+                יש לבחור פריט מהרשימה
+            </mat-error>
+          </mat-form-field>
+            </div>
+          </mat-grid-tile>
+        
+          
+        </mat-grid-list>
+  
+      <!--   <div class="btn-sec">
+          <button (click)="close()" mat-stroked-button style="margin-left: 7px;">
+            <mat-icon class="mat-icon-rtl-mirror">keyboard_backspace</mat-icon>
+          </button>
+          <button mat-raised-button color="primary" *ngIf="isSwapMode()" class="Update-btn" 
+          (click) = "fieldFind()">שליחה לאיתור שטח</button>
+          <button mat-raised-button color="primary" class="Update-btn" (click) = "phoneFind()" >שליחה לאיתור טלפוני</button>
+          <button mat-raised-button color="primary" class="Update-btn" (click) = "askMAAM()">הוספת הזמנה ממע"מ</button>
+        </div> -->
+  
+    </div>
+  </div>

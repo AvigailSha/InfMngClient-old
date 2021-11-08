@@ -1,0 +1,50 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.buttons-line { 
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content {
+    height: 80%;
+    max-height: 430px;
+    overflow-y: auto;
+    //min-width: 90vw;
+} 
+
+.mat-list-base.inline-list {
+  display: flex;
+}
+
+.mat-list >  .mat-list-item:nth-child(2n+1){
+  background-color:#fafafa;
+}
+
+mat-list-item >  div.mat-list-item-content {
+    /*display: flex;
+    flex-direction: row;
+    align-items: center;*/
+    justify-content: space-between;
+    width: 100%;
+}
+
+ :host ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content, .mat-list-base .mat-list-option .mat-list-item-content{
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+/* .mat-list >  .mat-list-item:nth-child(2n){
+  background-color:gray;
+} */
+
+.full-width {
+  width: 100%;
+}

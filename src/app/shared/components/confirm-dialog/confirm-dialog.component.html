@@ -1,0 +1,12 @@
+<h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">{{ data.title }}</h1>
+<mat-dialog-content>
+    <p class="dialog-message">{{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button *ngIf = "data.closeIcon == true" (click)="close()" mat-stroked-button style="margin-left: 7px;">
+        <mat-icon class="mat-icon-rtl-mirror">keyboard_backspace</mat-icon>
+    </button>
+    <button mat-flat-button color="primary" (click)="confirm()">{{ data.confirmText }}</button>
+    <button *ngIf = "data.cancelText.length > 0" mat-stroked-button style="margin-left: 7px;" (click)="cancel()">{{ data.cancelText }}</button>
+    <button *ngIf = "data.closeText.length > 0" mat-stroked-button style="margin-left: 7px;" (click)="close()">{{ data.closeText }}</button>
+</mat-dialog-actions>

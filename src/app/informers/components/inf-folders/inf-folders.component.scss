@@ -1,0 +1,37 @@
+mat-grid-tile {
+    background: rgb(222, 241, 247);
+    max-height: 40vh;
+}
+
+.first-tile {
+    margin-left: 10px;
+}
+
+mat-selection-list {
+    max-height: 400px;
+    overflow: auto;
+}
+
+mat-list-item {
+    display:inline-block; 
+    width:50%; 
+    text-align:center;
+}
+
+.item-list {
+  min-height: 60px;
+  border-radius: 4px;
+  display: block;
+}
+
+mat-list {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.wrapper {
+    padding-bottom: 15px;
+    button {
+        margin-right: 15px;
+    }
+}

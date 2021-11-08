@@ -1,0 +1,26 @@
+<mat-grid-list cols="2">
+  
+    <mat-grid-tile class="first-tile">
+        <form [formGroup]="form">
+            <mat-selection-list #folders formControlName="folders" [compareWith]="compareFolders" (selectionChange)="attachFolder()">
+                <mat-list-option *ngFor="let folder of allFolders" [value]="folder">
+                {{folder.value}}
+                </mat-list-option>
+            </mat-selection-list>   
+        </form>
+    </mat-grid-tile>
+
+    <mat-grid-tile>  
+        <mat-list> 
+            <h3>פולדרים משויכים למדווח</h3>
+            <mat-list-item *ngFor="let infFolder of selectedFolders$ | async ; let idx = index"
+                style="display:inline-block; width:50%; text-align:center;" ngDefaultControl>
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="removeFolder(infFolder.key)">
+                    <mat-icon style="font-size: small;">close</mat-icon>
+                </button> 
+                {{infFolder.value}}
+            </mat-list-item>
+        </mat-list>  
+    </mat-grid-tile>
+
+</mat-grid-list>

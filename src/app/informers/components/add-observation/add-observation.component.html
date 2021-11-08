@@ -1,0 +1,125 @@
+<div mat-dialog-title class="titleDialog">הוספת תצפיות:</div>
+<mat-dialog-content [formGroup]="form">
+
+  <div class="maindialog">          
+    <mat-form-field>      
+      <mat-label>בחר פריט</mat-label>
+      <input type="text"
+             #input
+             placeholder="בחר פריט להוספה"
+             aria-label="בחר פריט"
+             matInput
+             [formControl]="fACItems" 
+             [matAutocomplete]="auto1">
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelect()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <!-- [displayWith]="displayFn" -->
+      <mat-autocomplete #auto1="matAutocomplete" panelWidth="65vw" >
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value">
+          {{option.value}}
+        </mat-option>
+      </mat-autocomplete>           
+      <mat-error *ngIf="fACItems.hasError('incorrectValue')">
+        {{errors.incorrectValue}}
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-icon-button (click)="addItem();clearSelect();" 
+      [disabled]="fACItems.hasError('incorrectValue') || fACItems.value.length==0">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+  </div>
+
+  <div formArrayName="newObs">
+    <div *ngFor="let con of fnewObs().controls; let itemI = index"> 
+      <div [formGroupName]="itemI" Style="padding: 15px 15px 0 0;">
+        <div>
+          <p>{{itemI + 1}}. </p>
+          <mat-form-field>
+            <mat-label>קוד פריט</mat-label>
+            <input matInput placeholder="" formControlName="itemId" readonly>
+          </mat-form-field>
+        
+          <mat-form-field>
+            <mat-label>שם פריט</mat-label>
+            <input matInput placeholder="" formControlName="name" readonly>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>משקל תצפית</mat-label>
+            <input matInput placeholder="" formControlName="weight">
+          </mat-form-field>
+
+          <button mat-icon-button (click)="removeItem(itemI);" >
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+        <ng-container *ngIf="isDispayPM[itemI].multiShow">
+          <div id="propMod" class="props" *ngIf="isDispayPM[itemI].multiShow && !isDispayPM[itemI].selected">
+      
+          <div>         
+            <mat-list formArrayName="ACModsArr" *ngFor="let prop of fACModsArr(itemI).controls; let propI = index">
+              <mat-list-item  [formGroupName]="propI">
+                {{fACModsArr(itemI).at(propI).get("pName").value}}              
+                  <mat-form-field>      
+                  <mat-label>הגדר אופנות</mat-label>
+                  <input type="text"
+                        #input
+                        placeholder=""
+                        aria-label="הגדר אופנות"
+                        matInput
+                        [formControl]="fACMods(itemI, propI)" 
+                        [matAutocomplete]="modAuto">
+                  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearMSelect(propI,itemI)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <mat-autocomplete #modAuto="matAutocomplete" panelWidth="65vw" (optionSelected)="selectModality($event.option.value, itemI, fnewObs().at(itemI).get('itemId').value, fACModsArr(itemI).at(propI).get('pId').value)">
+                    <mat-option *ngFor="let option of modsFilter.get(fnewObs().at(itemI).get('itemId').value+fACModsArr(itemI).at(propI).get('pId').value) | async" [value]="option.value">
+                      {{option.value}}                    
+                    </mat-option>
+                  </mat-autocomplete> 
+                </mat-form-field>
+      
+              </mat-list-item>
+        
+            </mat-list>
+            <div *ngIf="isDispayPM[itemI].multiShow && !isDispayPM[itemI].selected && !isDispayPM[itemI].valid" class="error">
+            {{errors.duplicateOb}}
+            </div>
+          </div>
+            <button mat-mini-fab matTooltip="אישור והוספה" class="general-fab" (mousedown)="addPropMod(fnewObs().at(itemI).get('itemId').value,itemI);"
+              [disabled]="isDisableAddMod(itemI)">
+              <mat-icon>done</mat-icon>
+            </button>
+          </div>
+          <div id="propModAfterSelected" formArrayName="propsMods" *ngIf="isDispayPM[itemI].multiShow && isDispayPM[itemI].selected">
+            <p *ngIf="fpropMod(itemI).length > 0">אופנויות: </p>
+            <ng-container *ngFor="let pm of fpropMod(itemI).controls; let pmI = index">
+              <ng-container [formGroupName]="pmI">
+                <mat-form-field>
+                  <mat-label>{{fpropMod(itemI).at(pmI).get("propName").value}}</mat-label>
+                  <input matInput placeholder="" formControlName="modName">
+                </mat-form-field> 
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+  </div>
+
+
+  
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <div style=" width: 100%; display: flex; justify-content: right; align-items: center;">
+      <button (click)="close()" mat-stroked-button style="margin-left: 7px;">
+        <mat-icon class="mat-icon-rtl-mirror">keyboard_backspace</mat-icon>
+      </button>
+      <button mat-flat-button color="primary" [disabled]="form.value.newObs.length==0" (click)="save()">שמירה</button>
+    </div>
+</mat-dialog-actions>
+

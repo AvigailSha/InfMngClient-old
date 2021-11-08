@@ -1,0 +1,84 @@
+
+<div class="buttons-line">
+    <form>
+      <mat-form-field >
+        <mat-label>שם פולדר</mat-label>
+        <input type="text"
+              #input
+               placeholder="בחר פולדר"
+               aria-label="Number"
+               matInput
+               [formControl]="folderControl"
+               [(ngModel)] = "searchText"
+               autocomplete="off"
+               class = "full-width"
+               >
+               <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelect()">
+                <mat-icon>close</mat-icon>
+              </button> 
+       <!--  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"  [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredOptions | async " [value]="option">
+            {{option.value}}
+          </mat-option>
+        </mat-autocomplete> -->
+     
+     <!--    <mat-error *ngIf="folderControl.hasError('incorrect')">
+          יש לבחור פריט מהרשימה
+      </mat-error> -->
+      
+        </mat-form-field> 
+    </form> 
+
+    <button mat-raised-button class="mat-raised-button-bold" color="primary" (click)="openItemsDialog()">
+      <mat-icon>create_new_folder</mat-icon> הוספת פולדר
+    </button>  
+  
+</div>
+
+<div class="content">
+    <mat-list  >
+        <mat-list-item *ngFor="let folder of foldersList | filter : searchText; let i = index;" 
+          (dblclick)="openItemsDialog(folder)" >
+          <div>
+   
+            <span *ngIf="!display[i]" > {{i+1}}.&nbsp; {{folder.value}}  </span>
+            <mat-form-field *ngIf="display[i]">
+              <input matInput [(ngModel)]="updateItem" [formControl]="updateItemFormControl" 
+                [hidden]="!display[i]" (focusout)="display[i]=false; " minlength="3" maxlength="150" autofocus #edit>
+              <mat-error *ngIf="updateItemFormControl.hasError('minlength')">
+                min 3 caracters
+              </mat-error>
+              <mat-hint align="end">{{edit.value.length}} / 150 </mat-hint>
+            </mat-form-field>
+            <button mat-icon-button color="primary" (mousedown)="changeItem(folder.key); display[i] = false;" *ngIf="display[i]"><mat-icon>check_circle</mat-icon></button>
+            <button mat-icon-button matTooltip="עריכה" color="primary" (click)="openEdit(i,folder);" *ngIf="!display[i]" ><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button matTooltip= "מחיקה" color="primary" *ngIf="!display[i]" (click)="deleteFolder(folder.key)"><mat-icon>delete_outline</mat-icon></button>
+            
+          </div>
+          <div>
+            <button mat-icon-button matTooltip="פריטי פולדר" color="accent" (click) = "openItemsDialog(folder)" >
+                 <mat-icon >more_vert</mat-icon>
+            </button>
+          </div>    
+          <!-- <mat-divider></mat-divider> -->
+        </mat-list-item>
+        
+    </mat-list>
+</div>
+    
+    <!--   <h3 matLine ><strong>{{i+1}}.</strong>&nbsp; {{folder.value}}  
+    
+           
+            <button mat-icon-button matTooltip="עריכה" (click)="openEdit(i)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button matTooltip= "מחיקה"><mat-icon>delete</mat-icon></button>
+         <button mat-icon-button matTooltip="פריטי פולדר" color="primary" (click) = "openItemsDialog(folder)" >
+          <mat-icon >more_vert</mat-icon>
+        </button>    
+       </h3>
+       <h3 matLine *ngIf="this.display[i]">
+        <mat-form-field >
+          <input matInput  minlength="3" maxlength="150" autofocus placeholder="הכנס שם פולדר">  
+        </mat-form-field>
+      </h3>
+        
+         -->

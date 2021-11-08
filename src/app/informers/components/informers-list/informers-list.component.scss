@@ -1,0 +1,148 @@
+.inf-spacer {
+    flex: 1 1 auto;
+  }
+
+  .filters-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    /*width: 100%;*/
+   // background-color: var(--p-50);
+  }
+
+  .filter-wrap {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .filter-item {
+    width: 90%;
+  }
+/*   .horizontal-mat-list-item {
+    float: right;
+    display: list-item;
+    }
+   
+.mat-list-base.inline-list {
+  display: flex;
+} */
+  .mat-table {
+    overflow: auto;
+    max-height: 55vh;
+  }
+
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+
+  mat-header-cell {
+    font-size: 16px !important ;
+  }
+  
+  th.mat-header-cell,
+  td.mat-cell,
+  td.mat-footer-cell {
+    border-bottom-width: 1px;  
+  }
+
+  .mat-paginator {
+      box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 
+        0px 8px 10px 1px rgb(0 0 0 / 14%), 
+        0px 3px 14px 2px rgb(0 0 0 / 12%);
+  }
+  
+  .mat-paginator-sticky {
+    bottom: 0px;
+    position: sticky;
+    z-index: 10;
+  }
+
+  .mat-raised-button-bold {
+    font-weight: bold;
+  }
+  
+  .buttons-line{ 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   }
+
+  .small-fab {
+    // margin-right: 8px;
+     width: 30px;
+     height: 30px;
+     line-height: 22px;
+     font-size: 22px;
+     background-color:  rgb(63,81,181);
+     opacity: 3;
+  
+     &::ng-deep .mat-button-wrapper{
+        // line-height: 18px;
+         padding: 0;
+  
+          .mat-icon {
+              font-size: 22px;
+             // padding-right: 4px;
+            //  padding-top: 4px;
+          }
+    }
+  }
+  
+    ::ng-deep .mat-button{
+      width: 32px !important;
+      height: 32px !important; 
+    /* font-size:16px !important;
+    */
+  }
+  .make-gray {
+    color: gray
+  } 
+
+.color-row-red .mat-cell {
+  color: #D84315;
+}
+
+.color-row-blue .mat-cell {
+  color: #1565C0;
+}
+
+.color-row-purple .mat-cell {
+  color: #512DA8;
+}
+
+.color-row-lpurple .mat-cell {
+  color: #BA68C8;
+}
+.color-row-black .mat-cell {
+  color: black;
+}
+
+.color-row-gray .mat-cell {
+  color: gray;
+}
+ 
+/* 
+.color-row-red .mat-cell {
+  background-color: #E57373;
+}
+
+.color-row-blue .mat-cell {
+  background-color: #42A5F5;
+}
+
+.color-row-purple .mat-cell {
+  background-color: #BA68C8;
+}
+
+.color-row-black .mat-cell {
+  color: black;
+}
+
+.color-row-gray .mat-cell {
+  background-color: gray;
+} */
+
+
+
+
+
