@@ -6,6 +6,11 @@ import { FoldersRoutingModule } from './folders-routing.module';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ENTITY_METADATA_TOKEN } from '@ngrx/data';
+import { EffectsModule } from '@ngrx/effects';
+import { foldersEffects } from './redux/folders.effects';
+import { StoreModule } from '@ngrx/store';
+import { folderFeatureKey } from './redux/folders.state';
 
 
 
@@ -16,7 +21,12 @@ import { SharedModule } from '../shared/shared.module';
     FoldersRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    EffectsModule.forFeature([foldersEffects]),
+    //StoreModule.forFeature(folderFeatureKey)
+  ],
+  providers: [
+
   ]
 })
 export class FoldersModule { }

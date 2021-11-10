@@ -4,7 +4,6 @@ import { environment } from 'src/environments/environment';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, publishReplay, refCount, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { SortDirection } from '@angular/material/sort';
-import { promise } from 'protractor';
 import { Informer } from 'src/app/informers/models/informer.model';
 
 @Injectable({

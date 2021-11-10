@@ -15,6 +15,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { EntityDataModule } from '@ngrx/data';
+import { entityConfig } from './redux/entity-metadata';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,9 @@ import { SharedModule } from './shared/shared.module';
     MaterialModule,
     ReactiveFormsModule,    
     AngularSvgIconModule.forRoot(),
-    SharedModule
+    SharedModule,
+    StoreDevtoolsModule.instrument({maxAge:25,logOnly: environment.production}),
+    EntityDataModule.forRoot(entityConfig)
   ],
   providers: [
     WebApiCallsService,

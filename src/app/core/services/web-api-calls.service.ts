@@ -35,4 +35,26 @@ export class WebApiCallsService {
 
     return this.http.get(this.ServerURL + url, httpOptions);
   }
+
+  putHttpCall(url,data, params = ''): Observable<any> {
+    var httpOptions = {
+      headers:
+        new HttpHeaders({
+          'Content-Type': 'application/json'
+        }),
+    }
+    
+    return this.http.put(this.ServerURL + url + params, JSON.stringify(data), httpOptions);
+  }
+
+  deleteHttpCall(url, params = ''): Observable<any> {
+    var httpOptions = {
+      headers:
+        new HttpHeaders({
+          'Content-Type': 'application/json'
+        }),
+    }
+    
+    return this.http.post(this.ServerURL + url + params, httpOptions);
+  }
 }
