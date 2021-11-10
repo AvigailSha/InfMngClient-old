@@ -11,6 +11,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { foldersEffects } from './redux/folders.effects';
 import { StoreModule } from '@ngrx/store';
 import { folderFeatureKey } from './redux/folders.state';
+import { foldersReducer } from './redux/folders.reducer'
 
 
 
@@ -23,7 +24,7 @@ import { folderFeatureKey } from './redux/folders.state';
     ReactiveFormsModule,
     SharedModule,
     EffectsModule.forFeature([foldersEffects]),
-    //StoreModule.forFeature(folderFeatureKey)
+    StoreModule.forFeature(folderFeatureKey, foldersReducer)
   ],
   providers: [
 
